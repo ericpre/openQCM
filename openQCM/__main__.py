@@ -1,5 +1,9 @@
 from openQCM.app import OPENQCM
 
 
-if __name__ == '__main__':
+def main():
     OPENQCM().run()
+
+
+if __name__ == '__main__':
+    main()
