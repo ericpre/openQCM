@@ -1,0 +1,47 @@
+{% set name = "openQCM" %}
+{% set version = "2.1" %}
+
+package:
+  name: {{ name|lower }}
+  version: {{ version }}
+
+source:
+  path: ..
+
+build:
+  number: 0
+  entry_points:
+    - openQCM = openQCM.__main__:main
+
+requirements:
+  host:
+    - python
+    - pip
+
+  run:
+    - python
+    - bottleneck
+    - h5py
+    - lxml
+    - numpy
+    - pandas
+    - progressbar
+    - pyserial
+    - pyqt
+    - pyqtgraph
+    - scipy
+
+
+test:
+  imports:
+    - openQCM
+
+about:
+  home: https://openqcm.com/openqcm-q-1-software
+  license: GPL-3.0-or-later
+  license_file: LICENSE
+  summary: Real Time Frequency and Dissipation Monitoring for the openQCM Q-1 device
+
+extra:
+  recipe-maintainers:
+    - ericpre
