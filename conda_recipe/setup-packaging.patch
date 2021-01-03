@@ -1,0 +1,109 @@
+From 700d184ea039e8eca6a69a21cb004f1b8b76bfc7 Mon Sep 17 00:00:00 2001
+From: Eric Prestat <eric.prestat@gmail.com>
+Date: Sun, 3 Jan 2021 19:10:50 +0000
+Subject: [PATCH] Setup packaging and fix path to load calibration file.
+
+---
+ MANIFEST.in               |  1 +
+ openQCM/__main__.py       |  6 +++++-
+ openQCM/core/constants.py |  8 +++++---
+ setup.py                  | 30 ++++++++++++++++++++++++++++++
+ 4 files changed, 41 insertions(+), 4 deletions(-)
+ create mode 100644 MANIFEST.in
+ create mode 100644 setup.py
+
+diff --git a/MANIFEST.in b/MANIFEST.in
+new file mode 100644
+index 0000000..0cc6f36
+--- /dev/null
++++ b/MANIFEST.in
+@@ -0,0 +1 @@
++recursive-include openQCM *.txt
+diff --git a/openQCM/__main__.py b/openQCM/__main__.py
+index eb7e4b7..cf0d755 100644
+--- a/openQCM/__main__.py
++++ b/openQCM/__main__.py
+@@ -1,5 +1,9 @@
+ from openQCM.app import OPENQCM
+ 
+ 
+-if __name__ == '__main__':
++def main():
+     OPENQCM().run()
++
++
++if __name__ == '__main__':
++    main()
+diff --git a/openQCM/core/constants.py b/openQCM/core/constants.py
+index 7de9dc2..5ccfd13 100644
+--- a/openQCM/core/constants.py
++++ b/openQCM/core/constants.py
+@@ -3,8 +3,10 @@ import numpy as np
+ from pyqtgraph import AxisItem
+ from time import strftime, localtime
+ import time
+-import datetime 
++import datetime
++import os
+ 
++import openQCM
+ from openQCM.common.architecture import Architecture,OSType
+ 
+ ###############################################################################    
+@@ -169,7 +171,7 @@ class Constants:
+     # File parameters for exporting data #
+     ######################################
+     # sets the slash depending on the OS types
+-    if Architecture.get_os() is (OSType.macosx or OSType.linux):
++    if Architecture.get_os() in [OSType.macosx, OSType.linux]:
+        slash="/"
+     else:
+        slash="\\"
+@@ -186,7 +188,7 @@ class Constants:
+     # Calibration: scan (WRITE for @5MHz and @10MHz QCS) path: 'common\'
+     csv_calibration_filename    = "Calibration_5MHz"
+     csv_calibration_filename10  = "Calibration_10MHz"
+-    csv_calibration_export_path = "openQCM" #"common"
++    csv_calibration_export_path = os.path.dirname(openQCM.__file__) #"common"
+     
+     ################## 
+     # Calibration: baseline correction (READ for @5MHz and @10MHz QCS) path: 'common\'
+diff --git a/setup.py b/setup.py
+new file mode 100644
+index 0000000..5f89901
+--- /dev/null
++++ b/setup.py
+@@ -0,0 +1,30 @@
++from setuptools import setup, find_packages
++from openQCM import __version__
++
++
++install_requires = ['h5py',
++                    'lxml',
++                    'pandas',
++                    'progressbar',
++                    'pyserial',
++                    'pyqtgraph',
++                    'scipy',
++                    ]
++
++setup(name='openQCM',
++      version=__version__,
++      description='Real Time Frequency and Dissipation Monitoring for the openQCM Q-1 device',
++      url='https://openqcm.com',
++      license='GPL-3.0-or-later',
++      package_data={'openQCM':['*.txt'],
++                    },
++      entry_points={
++          'gui_scripts': [
++              'openQCM = openQCM.__main__:main',
++              ]
++          },
++      packages=find_packages(),
++      python_requires='~=3.6',
++      install_requires=install_requires,
++      zip_safe=False
++      )
+-- 
+2.30.0
+
