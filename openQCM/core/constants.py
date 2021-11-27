@@ -3,8 +3,10 @@ import numpy as np
 from pyqtgraph import AxisItem
 from time import strftime, localtime
 import time
-import datetime 
+import datetime
+import os
 
+import openQCM
 from openQCM.common.architecture import Architecture,OSType
 
 ###############################################################################    
@@ -34,7 +36,7 @@ class Constants:
     # Application Parameters #
     ##########################
     app_title = "Real-Time openQCM GUI"
-    app_version = '2.1'
+    app_version = openQCM.__version__
     app_sources = ["Measurement openQCM Q-1 Device", "Calibration openQCM Q-1 Device"]#, "Socket Client"]
     app_encoding = "utf-8"
     
@@ -169,7 +171,7 @@ class Constants:
     # File parameters for exporting data #
     ######################################
     # sets the slash depending on the OS types
-    if Architecture.get_os() is (OSType.macosx or OSType.linux):
+    if Architecture.get_os() in [OSType.macosx, OSType.linux]:
        slash="/"
     else:
        slash="\\"
@@ -186,7 +188,7 @@ class Constants:
     # Calibration: scan (WRITE for @5MHz and @10MHz QCS) path: 'common\'
     csv_calibration_filename    = "Calibration_5MHz"
     csv_calibration_filename10  = "Calibration_10MHz"
-    csv_calibration_export_path = "openQCM" #"common"
+    csv_calibration_export_path = os.path.dirname(openQCM.__file__) #"common"
     
     ################## 
     # Calibration: baseline correction (READ for @5MHz and @10MHz QCS) path: 'common\'
