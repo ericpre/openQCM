@@ -1,28 +1,39 @@
-From 700d184ea039e8eca6a69a21cb004f1b8b76bfc7 Mon Sep 17 00:00:00 2001
+From 7378678a79e9f725a47d91c4bd8254ed5a23989e Mon Sep 17 00:00:00 2001
 From: Eric Prestat <eric.prestat@gmail.com>
-Date: Sun, 3 Jan 2021 19:10:50 +0000
-Subject: [PATCH] Setup packaging and fix path to load calibration file.
+Date: Sat, 27 Nov 2021 13:53:04 +0000
+Subject: [PATCH] Setup packaging and fix path to load calibration file
 
 ---
  MANIFEST.in               |  1 +
- openQCM/__main__.py       |  6 +++++-
- openQCM/core/constants.py |  8 +++++---
- setup.py                  | 30 ++++++++++++++++++++++++++++++
- 4 files changed, 41 insertions(+), 4 deletions(-)
+ openQCM/__init__.py       |  5 +----
+ openQCM/__main__.py       |  6 ++++-
+ openQCM/core/constants.py | 12 +++++-----
+ setup.py                  | 47 +++++++++++++++++++++++++++++++++++++++
+ 5 files changed, 61 insertions(+), 10 deletions(-)
  create mode 100644 MANIFEST.in
  create mode 100644 setup.py
 
-diff --git a/MANIFEST.in b/MANIFEST.in
+diff --git a/OPENQCM/MANIFEST.in b/OPENQCM/MANIFEST.in
 new file mode 100644
 index 0000000..0cc6f36
 --- /dev/null
-+++ b/MANIFEST.in
++++ b/OPENQCM/MANIFEST.in
 @@ -0,0 +1 @@
 +recursive-include openQCM *.txt
-diff --git a/openQCM/__main__.py b/openQCM/__main__.py
+diff --git a/OPENQCM/openQCM/__init__.py b/OPENQCM/openQCM/__init__.py
+index 4584ef4..ab02866 100644
+--- a/OPENQCM/openQCM/__init__.py
++++ b/OPENQCM/openQCM/__init__.py
+@@ -1,4 +1 @@
+-from openQCM.core.constants import Constants
+-
+-
+-__version__ = Constants.app_version
++__version__ = "2.1"
+diff --git a/OPENQCM/openQCM/__main__.py b/OPENQCM/openQCM/__main__.py
 index eb7e4b7..cf0d755 100644
---- a/openQCM/__main__.py
-+++ b/openQCM/__main__.py
+--- a/OPENQCM/openQCM/__main__.py
++++ b/OPENQCM/openQCM/__main__.py
 @@ -1,5 +1,9 @@
  from openQCM.app import OPENQCM
  
@@ -34,10 +45,10 @@ index eb7e4b7..cf0d755 100644
 +
 +if __name__ == '__main__':
 +    main()
-diff --git a/openQCM/core/constants.py b/openQCM/core/constants.py
-index 7de9dc2..5ccfd13 100644
---- a/openQCM/core/constants.py
-+++ b/openQCM/core/constants.py
+diff --git a/OPENQCM/openQCM/core/constants.py b/OPENQCM/openQCM/core/constants.py
+index 7de9dc2..4e1214c 100644
+--- a/OPENQCM/openQCM/core/constants.py
++++ b/OPENQCM/openQCM/core/constants.py
 @@ -3,8 +3,10 @@ import numpy as np
  from pyqtgraph import AxisItem
  from time import strftime, localtime
@@ -50,6 +61,15 @@ index 7de9dc2..5ccfd13 100644
  from openQCM.common.architecture import Architecture,OSType
  
  ###############################################################################    
+@@ -34,7 +36,7 @@ class Constants:
+     # Application Parameters #
+     ##########################
+     app_title = "Real-Time openQCM GUI"
+-    app_version = '2.1'
++    app_version = openQCM.__version__
+     app_sources = ["Measurement openQCM Q-1 Device", "Calibration openQCM Q-1 Device"]#, "Socket Client"]
+     app_encoding = "utf-8"
+     
 @@ -169,7 +171,7 @@ class Constants:
      # File parameters for exporting data #
      ######################################
@@ -68,18 +88,42 @@ index 7de9dc2..5ccfd13 100644
      
      ################## 
      # Calibration: baseline correction (READ for @5MHz and @10MHz QCS) path: 'common\'
-diff --git a/setup.py b/setup.py
+@@ -324,4 +326,4 @@ class NonScientificAxis(AxisItem):
+         super(NonScientificAxis, self).__init__(*args, **kwargs)
+ 
+     def tickStrings(self, values, scale, spacing):
+-        return [int(value*1) for value in values] 
+\ No newline at end of file
++        return [int(value*1) for value in values] 
+diff --git a/OPENQCM/setup.py b/OPENQCM/setup.py
 new file mode 100644
-index 0000000..5f89901
+index 0000000..96b34bd
 --- /dev/null
-+++ b/setup.py
-@@ -0,0 +1,30 @@
++++ b/OPENQCM/setup.py
+@@ -0,0 +1,47 @@
++import codecs
++import os.path
 +from setuptools import setup, find_packages
-+from openQCM import __version__
++
++
++# https://packaging.python.org/guides/single-sourcing-package-version/
++def read(rel_path):
++    here = os.path.abspath(os.path.dirname(__file__))
++    with codecs.open(os.path.join(here, rel_path), 'r') as fp:
++        return fp.read()
++
++def get_version(rel_path):
++    for line in read(rel_path).splitlines():
++        if line.startswith('__version__'):
++            delim = '"' if '"' in line else "'"
++            return line.split(delim)[1]
++    else:
++        raise RuntimeError("Unable to find version string.")
 +
 +
 +install_requires = ['h5py',
 +                    'lxml',
++                    'numpy',
 +                    'pandas',
 +                    'progressbar',
 +                    'pyserial',
@@ -88,7 +132,7 @@ index 0000000..5f89901
 +                    ]
 +
 +setup(name='openQCM',
-+      version=__version__,
++      version=get_version("openQCM/__init__.py"),
 +      description='Real Time Frequency and Dissipation Monitoring for the openQCM Q-1 device',
 +      url='https://openqcm.com',
 +      license='GPL-3.0-or-later',
@@ -105,5 +149,5 @@ index 0000000..5f89901
 +      zip_safe=False
 +      )
 -- 
-2.30.0
+2.30.2
 
