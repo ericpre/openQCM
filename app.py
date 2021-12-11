@@ -1,7 +1,7 @@
 from multiprocessing import freeze_support
 import sys
 import os #add
-from PyQt5 import QtGui
+from PyQt5 import QtWidgets
 from openQCM.common.architecture import Architecture,OSType
 from openQCM.common.arguments import Arguments
 from openQCM.common.logger import Logger as Log
@@ -23,7 +23,7 @@ class OPENQCM:
           
         freeze_support()
         self._args = self._init_logger()
-        self._app = QtGui.QApplication(argv)
+        self._app = QtWidgets.QApplication(argv)
         ##
         if Architecture.get_os() is OSType.windows:
           '''

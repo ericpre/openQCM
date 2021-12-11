@@ -6,7 +6,7 @@ from openQCM.ui.mainWindow_ui import Ui_Controls, Ui_Info, Ui_Plots
 
 from pyqtgraph import AxisItem
 import pyqtgraph as pg
-from PyQt5 import QtCore, QtGui
+from PyQt5 import QtCore, QtGui, QtWidgets
 from openQCM.core.worker import Worker
 from openQCM.core.constants import Constants, SourceType, DateAxis, NonScientificAxis
 from openQCM.ui.popUp import PopUp
@@ -20,7 +20,7 @@ TAG = ""#"[MainWindow]"
 # Package that handles the UIs elements and connects to worker service to execute processes
 ##########################################################################################
 
-class PlotsWindow(QtGui.QMainWindow):
+class PlotsWindow(QtWidgets.QMainWindow):
      
     def __init__(self, samples=Constants.argument_default_samples):
         super().__init__()  
@@ -32,7 +32,7 @@ class PlotsWindow(QtGui.QMainWindow):
         res =PopUp.question(self, Constants.app_title, "Are you sure you want to quit openQCM application now?")
         if res: 
            #self.close()
-           QtGui.QApplication.quit()
+           QtWidgets.QApplication.quit()
         else:
            event.ignore()#pass
         #sys.exit(0)
@@ -43,7 +43,7 @@ class PlotsWindow(QtGui.QMainWindow):
 
     
 #------------------------------------------------------------------------------
-class InfoWindow(QtGui.QMainWindow):    
+class InfoWindow(QtWidgets.QMainWindow):    
     
     def __init__(self, samples=Constants.argument_default_samples):
         super().__init__()
@@ -55,7 +55,7 @@ class InfoWindow(QtGui.QMainWindow):
         res =PopUp.question(self, Constants.app_title, "Are you sure you want to quit openQCM application now?")
         if res: 
            #self.close()
-           QtGui.QApplication.quit()
+           QtWidgets.QApplication.quit()
         else:
            event.ignore()
     '''
@@ -64,7 +64,7 @@ class InfoWindow(QtGui.QMainWindow):
            event.ignore()    
 
 #------------------------------------------------------------------------------
-class ControlsWindow(QtGui.QMainWindow):    
+class ControlsWindow(QtWidgets.QMainWindow):    
     
     def __init__(self, samples=Constants.argument_default_samples):
         super().__init__()
@@ -76,13 +76,13 @@ class ControlsWindow(QtGui.QMainWindow):
         res =PopUp.question(self, Constants.app_title, "Are you sure you want to quit openQCM application now?")
         if res: 
            #self.close()
-           QtGui.QApplication.quit()
+           QtWidgets.QApplication.quit()
         else:
            event.ignore()
 
 #------------------------------------------------------------------------------
 
-class MainWindow(QtGui.QMainWindow):
+class MainWindow(QtWidgets.QMainWindow):
     
     ###########################################################################
     # Initializes methods, values and sets the UI
@@ -91,7 +91,7 @@ class MainWindow(QtGui.QMainWindow):
         
         #:param samples: Default samples shown in the plot :type samples: int.
         # to be always placed at the beginning, initializes some important methods
-        QtGui.QMainWindow.__init__(self)
+        QtWidgets.QMainWindow.__init__(self)
         
         # Sets up the user interface from the generated Python script using Qt Designer
         # Instantiates Ui classes

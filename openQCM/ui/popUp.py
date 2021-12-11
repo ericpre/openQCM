@@ -1,4 +1,4 @@
-from PyQt5 import QtGui
+from PyQt5.QtWidgets import QMessageBox
 
 TAG = "[PopUp]"
 
@@ -18,26 +18,26 @@ class PopUp:
         :param message: Message to be shown in the dialog :type message: str.
         :return: 1 if button1 was pressed, 0 if button2   :rtype: int.
         """
-        #ans = QtGui.QMessageBox.question(parent, title, message, QtGui.QMessageBox.Yes, QtGui.QMessageBox.No)
-        #if ans == QtGui.QMessageBox.Yes:
+        #ans = QMessageBox.question(parent, title, message, QMessageBox.Yes, QMessageBox.No)
+        #if ans == QMessageBox.Yes:
         #    print('Si')
         #    return True
-        #elif ans == QtGui.QMessageBox.No:
+        #elif ans == QMessageBox.No:
         #    print('No')
         #    return False
         left = 700
         top = 400
         width = 340
         height = 220
-        box = QtGui.QMessageBox(parent)
-        box.setIcon(QtGui.QMessageBox.Question)
+        box = QMessageBox(parent)
+        box.setIcon(QMessageBox.Question)
         box.setWindowTitle(title)
         box.setGeometry(left, top, width, height)
         box.setText(message)
-        box.setStandardButtons(QtGui.QMessageBox.Yes|QtGui.QMessageBox.No)
-        button1 = box.button(QtGui.QMessageBox.Yes)
+        box.setStandardButtons(QMessageBox.Yes|QMessageBox.No)
+        button1 = box.button(QMessageBox.Yes)
         button1.setText('@10MHz')
-        button2 = box.button(QtGui.QMessageBox.No)
+        button2 = box.button(QMessageBox.No)
         button2.setText(' @5MHz')
         box.exec_()
         
@@ -58,9 +58,9 @@ class PopUp:
         :param title: Title of the dialog :type title: str.
         :param message: Message to be shown in the dialog :type message: str.
         """
-        QtGui.QMessageBox.warning(parent, title, message, QtGui.QMessageBox.Ok)
-        #msgBox=QtGui.QMessageBox.warning(parent, title, message, QtGui.QMessageBox.Ok)
-        #msgBox = QtGui.QMessageBox()
+        QMessageBox.warning(parent, title, message, QMessageBox.Ok)
+        #msgBox = QMessageBox.warning(parent, title, message, QMessageBox.Ok)
+        #msgBox = QMessageBox()
         #msgBox.setIconPixmap( QtGui.QPixmap("favicon.png"))
         #msgBox.exec_() 
 
@@ -75,8 +75,8 @@ class PopUp:
         :param message: Message to be shown in the dialog :type message: str.
         :return: True if Yes button was pressed :rtype: bool.
         """
-        ans = QtGui.QMessageBox.question(parent, title, message, QtGui.QMessageBox.Yes, QtGui.QMessageBox.No)
-        if ans == QtGui.QMessageBox.Yes:
+        ans = QMessageBox.question(parent, title, message, QMessageBox.Yes, QMessageBox.No)
+        if ans == QMessageBox.Yes:
             return True
         else:
             return False
